@@ -41,10 +41,7 @@ function Header() {
           <p className="text-blue-400">Welcome to Meta Messanger</p>
         </div>
 
-        <Link
-          href="/auth/signin"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
+        <Link href="/auth/signin" className="primary-button">
           {" "}
           Sign In
         </Link>
