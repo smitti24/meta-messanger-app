@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { Message } from "../typings";
 
 function ChatInput() {
   const [input, setInput] = useState("");
@@ -12,6 +14,29 @@ function ChatInput() {
 
     const messageToSend = input;
     setInput("");
+
+    const id = uuid();
+    const message: Message = {
+      id,
+      message: messageToSend,
+      created_at: Date.now(),
+      username: "Smiley",
+      email: "andre.frank.smith@gmail.com",
+      profilePic:
+        "https://marketplace.canva.com/EAEeKH905XY/2/0/1600w/canva-yellow-and-black-gamer-grunge-twitch-profile-picture-Yf5RCMJroQI.jpg",
+    };
+
+    const uploadMessageToUpstash = async () => {
+      const res = await fetch("/api/addMessage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await res.json();
+    };
   };
 
   return (
@@ -23,7 +48,7 @@ function ChatInput() {
         type="text"
         onChange={(e) => setInput(e.target.value)}
         placeholder="Enter message here..."
-        className="flex-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent px-5 py-3 text-black font-bold"
+        className="flex-1 rounded border animate-pulse focus:animate-none border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent px-5 py-3 text-black font-bold"
       />
       <button
         type="submit"
