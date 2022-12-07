@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import ChatInput from "./ChatInput";
+import MessageList from "./MessageList";
 
 function HomePage() {
   return (
-    <div className='text-2xl font-bold'>HomePage</div>
-  )
+    <main>
+      <MessageList />
+      <ChatInput />
+    </main>
+  );
 }
 
-export default HomePage
+export default HomePage;
