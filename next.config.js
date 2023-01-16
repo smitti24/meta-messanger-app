@@ -5,6 +5,11 @@ module.exports = {
     appDir: true,
   },
   images: {
-    domains: ["links.papareact.com", "marketplace.canva.com"],
+    domains: [
+      "links.papareact.com",
+      "marketplace.canva.com",
+      "upload.wikimedia.org",
+      "platform-lookaside.fbsbx.com",
+    ],
   },
 };

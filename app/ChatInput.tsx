@@ -5,28 +5,33 @@ import useSWR from "swr";
 import { v4 as uuid } from "uuid";
 import { Message } from "../typings";
 import fetcher from "../utils/fetchMessages";
+import { unstable_getServerSession } from "next-auth/next";
 
-function ChatInput() {
+type Props = {
+  session: Awaited<ReturnType<typeof unstable_getServerSession>>;
+};
+
+function ChatInput({ session }: Props) {
   const [input, setInput] = useState("");
   const { data: messages, error, mutate } = useSWR("/api/getMessages", fetcher);
 
   const addMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!input) return;
+    if (!input || !session) return;
 
     const messageToSend = input;
     setInput("");
 
     const id = uuid();
+
     const message: Message = {
       id,
       message: messageToSend,
       created_at: Date.now(),
-      username: "Smiley",
-      email: "andre.frank.smith@gmail.com",
-      profilePic:
-        "https://marketplace.canva.com/EAEeKH905XY/2/0/1600w/canva-yellow-and-black-gamer-grunge-twitch-profile-picture-Yf5RCMJroQI.jpg",
+      username: session?.user?.name!,
+      email: session?.user?.email!,
+      profilePic: session.user.image!,
     };
 
     const uploadMessageToUpstash = async () => {
@@ -54,6 +59,7 @@ function ChatInput() {
     >
       <input
         type="text"
+        disabled={!session}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Enter message here..."
         className="flex-1 rounded border animate-pulse focus:animate-none border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent px-5 py-3 text-black font-bold"
